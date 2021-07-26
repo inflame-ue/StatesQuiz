@@ -24,6 +24,7 @@ screen.bgpic('blank_states_img.gif')
 list_of_answers = []
 score = 0
 keep_going = True
+
 while keep_going:
     # Ask user:
     answer = screen.textinput(title=f"{score}/50 States Correct", prompt="What's another state?")
@@ -35,7 +36,8 @@ while keep_going:
     message.clear()  # Clearing the screen from any messages
 
     # Exit the game and save data into csv:
-
+    if answer_title == "Exit":
+        break
 
     if answer_title in data_list:
         # Check if answer not repeats.
@@ -56,5 +58,9 @@ while keep_going:
     if score >= 51:
         keep_going = False
 
-# Exit on click:
-screen.exitonclick()
+
+# CSV file with all missed states:
+dict_of_missed_states = {"state": list(set(data_list) - set(list_of_answers))}
+
+df = pandas.DataFrame(dict_of_missed_states)
+df.to_csv("states_to_learn.csv")
